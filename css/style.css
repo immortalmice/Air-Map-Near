@@ -1,0 +1,55 @@
+#center{
+	text-align: center;
+	position: absolute;
+}
+#gear{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 48px;
+	height: 48px;
+	cursor: pointer;
+	z-index: 100;
+}
+#gps{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}
+#auto_gps{
+	margin-top: 10px;
+}
+#order_gps{
+	margin-top: 10px;
+	display: none;
+}
+#degree_div{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+#decimal_div{
+	padding-left: 20px;
+	padding-right: 20px;
+	display: none;
+}
+#Map{
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+
+}
+.col-sm-3{
+	margin-top: 10px;
+	padding-left: 0px;
+	padding-right: 10px;
+}
+@media screen and (min-width: 768px){
+	.last{
+		padding-right: 0px;
+	}
+}
+@media screen and (max-width: 768px){
+	#gps_type{
+		margin-right: 10px;
+	}
+}
