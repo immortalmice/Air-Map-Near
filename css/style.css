@@ -6,8 +6,8 @@
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	width: 48px;
-	height: 48px;
+	width: 36px;
+	height: 36px;
 	cursor: pointer;
 	z-index: 100;
 }
@@ -15,6 +15,12 @@
 	position: absolute;
 	top: 10px;
 	left: 10px;
+}
+#moreInfo{
+	position: absolute;
+	bottom: 310px;
+	right: 10px;
+	cursor: pointer;
 }
 #auto_gps{
 	margin-top: 10px;

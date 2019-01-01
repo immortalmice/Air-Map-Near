@@ -77,6 +77,36 @@ function gmapLink(lat, lng){
 	return "https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=" + lat + "," + lng + "&z=16&output=embed&t="
 }
 
+function tableGenerator(){
+	if(!JSONdata) return "無資料";
+	var str = "";
+	str += "<table class=\"table table-striped\">";
+
+	str += "<thead><tr>";
+	str += "<th scope=\"col\">#</th>";
+	str += "<th scope=\"col\">名稱</th>";
+	str += "<th scope=\"col\">PM2.5</th>";
+	str += "<th scope=\"col\">濕度</th>";
+	str += "<th scope=\"col\">溫度</th>";
+	str +="</tr></thead>";
+
+	str += "<tbody>";
+	for(var i = 0; i <= JSONdata.sites.length-1; i ++){
+		var data = JSONdata.sites[i];
+		str += "<tr>";
+		str += "<th scope=\"row\">" + (i+1) + "</th>";
+		str += "<td>" + (data.SiteName === null ? "-" : data.SiteName) + "</td>";
+		str += "<td>" + (data.Data.Dust2_5 === null ? "-" : data.Data.Dust2_5) + "</td>";
+		str += "<td>" + (data.Data.Humidity === null ? "-" : data.Data.Humidity) + "</td>";
+		str += "<td>" + (data.Data.Temperature === null ? "-" : data.Data.Temperature) + "</td>";
+		str += "</tr>";
+	}
+
+	str += "</tbody></table>";
+
+	return str;
+}
+
 function updateGpsInfo(){
 	var latitude = position.lat;
 	var longitude = position.lng;
@@ -86,6 +116,7 @@ function updateGpsInfo(){
 	}
 	$("#gps").html("(" + Math.round(latitude*100000)/100000 + "," + Math.round(longitude*100000)/100000 + ")");
 	$("#Map").attr("src", gmapLink(latitude, longitude));
+	resizeing();
 }
 
 function ApplyOptions(data){
@@ -151,6 +182,7 @@ function gps(f){
 		navigator.geolocation.getCurrentPosition(function(position){
 			mapServiceProvider(position.coords.latitude, position.coords.longitude);
 			if(f)f();
+			resizeing();
 		},
 		function(error) {
 			switch (error.code) {
@@ -161,7 +193,7 @@ function gps(f){
 					subtitle_text.html('無法取得定位');
 					break;
 				case error.PERMISSION_DENIED:
-					subtitle_text.html('請允許瀏覽器的GPS定位功能');
+					subtitle_text.html('請允許瀏覽器的GPS定位功能後重新整理');
 					break;
 				case error.UNKNOWN_ERROR:
 					subtitle_text.html('不明的錯誤，請稍候再試');
@@ -183,12 +215,14 @@ function gps(f){
 			resizeing();
 		}
   	}else{
-		subtitle_text.html('請允許瀏覽器的GPS定位功能');
+		subtitle_text.html('請允許瀏覽器的GPS定位功能後重新整理');
 		resizeing();
 	}
+	resizeing();
 }
 
 function loop(){
+	resizeing();
 	if(position){
 		if(gps_on) gps();
 		if(!Object.is(position.lat, NaN) && !Object.is(position.lng, NaN)){
@@ -234,6 +268,7 @@ function loop(){
 	}else{
 		timeHandle = setTimeout(loop, 1000);
 	}
+	resizeing();
 }
 
 $(document).ready(function(){
@@ -244,7 +279,11 @@ $(document).ready(function(){
 	$("#subtitle").html("Loading...");
 	resizeing();
 
-	$("#gear").click(function(){$("#optionModal").modal('show')});
+	$("#gear").click(function(){$("#optionModal").modal('show');});
+	$("#moreInfo").click(function(){
+		$("#infoModal").modal('show');
+		$("#infoModalBody").html(tableGenerator());
+	});
 	$("#optionApply").click(function(){
 		$("#optionModal").modal('hide');
 		var formData = $("#optionForm").serializeArray();
